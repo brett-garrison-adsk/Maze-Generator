@@ -13,7 +13,7 @@ document.getElementById("CreateBlockBtn").addEventListener("click", () => {
     len = Number(document.getElementById("Length").value);
 
     w = Number(document.getElementById("Size").value);
-    ww = Number(document.getElementById("Wall").value) / 2;
+    ww = Math.floor(Number(document.getElementById("Wall").value) / 2);
 
     //createBlock(w,l,h);
     setup();
@@ -27,7 +27,9 @@ var width, height, len, cols, rows,
 
     current,
 
-    stack = [];
+    stack = [],
+
+    histID = await FormIt.GroupEdit.GetEditingHistoryID();
 
 function setup() {
     cols = Math.floor(width / w)
@@ -142,7 +144,7 @@ function Cell(i, j) {
     var x = this.i * w;
     var y = this.j * w;
     
-    var histID = await FormIt.GroupEdit.GetEditingHistoryID();
+    //var histID = await FormIt.GroupEdit.GetEditingHistoryID();
 
     // Top
     if (this.walls[0]) {
