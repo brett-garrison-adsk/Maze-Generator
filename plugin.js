@@ -129,7 +129,7 @@ function Cell(i, j) {
     }
 
     if (neighbors.length > 0) {
-      var r = Math.floor(Math.random(0, neighbors.length));
+      var r = Math.floor(Math.random() * neighbors.length);
       return neighbors[r];
     } else {
       return undefined;
