@@ -8,35 +8,35 @@ const createBlock = async (w,l,h) => {
 }
 
 document.getElementById("CreateBlockBtn").addEventListener("click", () => {
-    const w = Number(document.getElementById("Width").value);
-    const h = Number(document.getElementById("Height").value);
-    const l = Number(document.getElementById("Length").value);
+    width = Number(document.getElementById("Width").value);
+    // const h = Number(document.getElementById("Height").value);
+    len = Number(document.getElementById("Length").value);
 
     //createBlock(w,l,h);
     setup();
     draw();
 });
 
-var cols, rows,
+var width, height, len, cols, rows,
     w = 50,
     ww = 10 / 2,
     grid = [],
-    cols = floor(width / w),
-    rows = floor(height / w),
 
     current,
 
     stack = [];
 
 function setup() {
-  for (var j = 0; j < rows; j++) {
-    for (var i = 0; i < cols; i++) {
-      var cell = new Cell(i, j);
-      grid.push(cell);
+    cols = Math.floor(width / w)
+    rows = Math.floor(len / w)
+    for (var j = 0; j < rows; j++) {
+        for (var i = 0; i < cols; i++) {
+            var cell = new Cell(i, j);
+            grid.push(cell);
+        }
     }
-  }
 
-  current = grid[0];
+    current = grid[0];
 }
 
 function draw() {
@@ -126,7 +126,7 @@ function Cell(i, j) {
     }
 
     if (neighbors.length > 0) {
-      var r = floor(random(0, neighbors.length));
+      var r = Math.floor(Math.random(0, neighbors.length));
       return neighbors[r];
     } else {
       return undefined;
@@ -135,62 +135,98 @@ function Cell(i, j) {
 
   }
 
-  this.show = function() {
+  this.show = async function() {
     var x = this.i * w;
     var y = this.j * w;
     
+    var histID = await FormIt.GroupEdit.GetEditingHistoryID();
+
     // Top
     if (this.walls[0]) {
-      line(this.left && !this.left.walls[1] ? (x - ww) : (x + ww), y + ww, 
-           this.right && !this.right.walls[3] ? (x + w + ww) : (x + w - ww), y + ww);
-      
-      // Cap Left
-      if(this.left && !this.left.walls[0])
-        line(x - ww, y + ww, x - ww, y);
-      
-      // Cap Right
-      if(this.right && !this.right.walls[0])
-        line(x + w + ww, y + ww, x + w + ww, y);
+        WSM.APIConnectPoint3ds(histID, 
+            WSM.Geom.Point3d(this.left && !this.left.walls[1] ? (x - ww) : (x + ww), y + ww), 
+            WSM.Geom.Point3d(this.right && !this.right.walls[3] ? (x + w + ww) : (x + w - ww), y + ww)
+        );
+return
+        // Cap Left
+        if(this.left && !this.left.walls[0])
+            WSM.APIConnectPoint3ds(histID, 
+                WSM.Geom.Point3d(x - ww, y + ww), 
+                WSM.Geom.Point3d(x - ww, y)
+            );
+
+        // Cap Right
+        if(this.right && !this.right.walls[0])
+            WSM.APIConnectPoint3ds(histID, 
+                WSM.Geom.Point3d(x + w + ww, y + ww), 
+                WSM.Geom.Point3d(x + w + ww, y)
+            );
     }
-    
+    return
     // Right
     if (this.walls[1]) {
-      line(x + w - ww, this.top && !this.top.walls[2] ? (y - ww) : (y + ww), 
-           x + w - ww, this.bottom && !this.bottom.walls[0] ? (y + w + ww) : (y + w - ww));
+        WSM.APIConnectPoint3ds(histID, 
+            WSM.Geom.Point3d(x + w - ww, this.top && !this.top.walls[2] ? (y - ww) : (y + ww)), 
+            WSM.Geom.Point3d(x + w - ww, this.bottom && !this.bottom.walls[0] ? (y + w + ww) : (y + w - ww))
+        );
       
-      // Cap Top
-      if(this.top && !this.top.walls[1])
-        line(x + w - ww, y - ww, x + w, y - ww);
-      
-      // Cap Bottom
-      if(this.bottom && !this.bottom.walls[1])
-        line(x + w - ww, y + w + ww, x + w, y + w + ww);
+        // Cap Top
+        if(this.top && !this.top.walls[1])
+            WSM.APIConnectPoint3ds(histID, 
+                WSM.Geom.Point3d(x + w - ww, y - ww), 
+                WSM.Geom.Point3d(x + w, y - ww)
+            );
+
+        // Cap Bottom
+        if(this.bottom && !this.bottom.walls[1])
+            WSM.APIConnectPoint3ds(histID, 
+                WSM.Geom.Point3d(x + w - ww, y + w + ww), 
+                WSM.Geom.Point3d(x + w, y + w + ww)
+            );
     }
     
     // Bottom
     if (this.walls[2]) {
-      line(this.right && !this.right.walls[3] ? (x + w + ww) : (x + w - ww), y + w - ww, 
-        this.left && !this.left.walls[1] ? (x - ww) : (x + ww), y + w - ww);
+        WSM.APIConnectPoint3ds(histID, 
+            WSM.Geom.Point3d(this.right && !this.right.walls[3] ? (x + w + ww) : (x + w - ww), y + w - ww), 
+            WSM.Geom.Point3d(this.left && !this.left.walls[1] ? (x - ww) : (x + ww), y + w - ww)
+        );
       
-      // Cap Left
-      if(this.left && !this.left.walls[2])
-        line(x - ww, y + w - ww, x - ww, y + w + ww);
-      // Cap Right
-      if(this.right && !this.right.walls[2])
-        line(x + w + ww, y + w - ww, x + w + ww, y + w);
+        // Cap Left
+        if(this.left && !this.left.walls[2])
+            WSM.APIConnectPoint3ds(histID, 
+                WSM.Geom.Point3d(x - ww, y + w - ww), 
+                WSM.Geom.Point3d(x - ww, y + w + ww)
+            );
+
+        // Cap Right
+        if(this.right && !this.right.walls[2])
+            WSM.APIConnectPoint3ds(histID, 
+                WSM.Geom.Point3d(x + w + ww, y + w - ww), 
+                WSM.Geom.Point3d(x + w + ww, y + w)
+            );
     }
     
     // Left
     if (this.walls[3]) {
-      line(x + ww, this.bottom && !this.bottom.walls[0] ? (y + w + ww) : (y + w - ww), 
-           x + ww, this.top && !this.top.walls[2] ? (y - ww) : (y + ww));
+        WSM.APIConnectPoint3ds(histID, 
+            WSM.Geom.Point3d(x + ww, this.bottom && !this.bottom.walls[0] ? (y + w + ww) : (y + w - ww)), 
+            WSM.Geom.Point3d(x + ww, this.top && !this.top.walls[2] ? (y - ww) : (y + ww))
+        );
       
       // Cap Top
       if(this.top && !this.top.walls[3])
-        line(x + ww, y - ww, x, y - ww);
+        WSM.APIConnectPoint3ds(histID, 
+            WSM.Geom.Point3d(x + ww, y - ww), 
+            WSM.Geom.Point3d(x, y - ww)
+        );
+
       // Cap Bottom
       if(this.bottom && !this.bottom.walls[3])
-        line(x + ww, y + w + ww, x, y + w + ww);
+        WSM.APIConnectPoint3ds(histID, 
+            WSM.Geom.Point3d(x + ww, y + w + ww), 
+            WSM.Geom.Point3d(x, y + w + ww)
+        );
     }
   }
 }
