@@ -31,7 +31,7 @@ var width, height, len, cols, rows,
 
     histID = await FormIt.GroupEdit.GetEditingHistoryID();
 
-function setup() {
+async function setup() {
     cols = Math.floor(width / w)
     rows = Math.floor(len / w)
     for (var j = 0; j < rows; j++) {
@@ -42,6 +42,25 @@ function setup() {
     }
 
     current = grid[0];
+
+    // Draw outter border
+    WSM.APIConnectPoint3ds(histID, 
+        await WSM.Geom.Point3d(0, 0, 0), 
+        await WSM.Geom.Point3d(width, 0, 0)
+    );
+    WSM.APIConnectPoint3ds(histID, 
+        await WSM.Geom.Point3d(width, 0, 0), 
+        await WSM.Geom.Point3d(width, len, 0)
+    );
+    WSM.APIConnectPoint3ds(histID, 
+        await WSM.Geom.Point3d(width, len, 0), 
+        await WSM.Geom.Point3d(0, len, 0)
+    );
+    WSM.APIConnectPoint3ds(histID, 
+        await WSM.Geom.Point3d(0, len, 0), 
+        await WSM.Geom.Point3d(0, 0, 0)
+    );
+    return
 }
 
 function draw() {
