@@ -15,6 +15,7 @@ document.getElementById("CreateBlockBtn").addEventListener("click", () => {
     w = Number(document.getElementById("Size"));
     ww = Math.floor(Number(document.getElementById("Wall")) / 2);
 
+    debugger
     //createBlock(w,l,h);
     setup();
     draw();
