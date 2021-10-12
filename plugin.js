@@ -7,7 +7,7 @@ const createBlock = async (w,l,h) => {
     const test = await WSM.APICreateBlock(histID, pt1, pt2);
 }
 
-document.getElementById("CreateBlockBtn").addEventListener("click", () => {
+document.getElementById("CreateBlockBtn").addEventListener("click", async () => {
     width = Number(document.getElementById("Width").value);
     // const h = Number(document.getElementById("Height").value);
     len = Number(document.getElementById("Length").value);
@@ -16,7 +16,7 @@ document.getElementById("CreateBlockBtn").addEventListener("click", () => {
     ww = Math.floor(Number(document.getElementById("Wall").value) / 2);
 
     //createBlock(w,l,h);
-    setup();
+    await setup();
     draw();
 });
 
