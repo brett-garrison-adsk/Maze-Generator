@@ -144,8 +144,8 @@ function Cell(i, j) {
     // Top
     if (this.walls[0]) {
         WSM.APIConnectPoint3ds(histID, 
-            WSM.Geom.Point3d(this.left && !this.left.walls[1] ? (x - ww) : (x + ww), y + ww), 
-            WSM.Geom.Point3d(this.right && !this.right.walls[3] ? (x + w + ww) : (x + w - ww), y + ww)
+            await WSM.Geom.Point3d(this.left && !this.left.walls[1] ? (x - ww) : (x + ww), y + ww, 0), 
+            await WSM.Geom.Point3d(this.right && !this.right.walls[3] ? (x + w + ww) : (x + w - ww), y + ww, 0)
         );
 return
         // Cap Left
