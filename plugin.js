@@ -12,14 +12,17 @@ document.getElementById("CreateBlockBtn").addEventListener("click", () => {
     // const h = Number(document.getElementById("Height").value);
     len = Number(document.getElementById("Length").value);
 
+    w = Number(document.getElementById("Size"));
+    ww = Math.floor(Number(document.getElementById("Wall")) / 2);
+
     //createBlock(w,l,h);
     setup();
     draw();
 });
 
 var width, height, len, cols, rows,
-    w = 50,
-    ww = 10 / 2,
+    w,
+    ww,
     grid = [],
 
     current,
