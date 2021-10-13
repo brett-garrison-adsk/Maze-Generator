@@ -51,7 +51,7 @@ async function setup() {
         await WSM.Geom.Point3d(width, len, 0)
     );
 
-    var objid = await WSM.Utils.GetFaceIDFromCoedge(histId, 1);
+    var objid = await WSM.Utils.GetFaceIDFromCoedge(histID, 1);
 
     debugger;
 
