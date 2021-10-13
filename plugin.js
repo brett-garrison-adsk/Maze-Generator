@@ -45,13 +45,15 @@ async function setup() {
     current = grid[0];
 
     // Draw outter border
-    var obj = await WSM.APICreateRectangle(histID, 
+    await WSM.APICreateRectangle(histID, 
         await WSM.Geom.Point3d(0, 0, 0),
         await WSM.Geom.Point3d(width, 0, 0),
         await WSM.Geom.Point3d(width, len, 0)
     );
 
-    WSM.APIExtrudeEdges(histID, obj)
+    debugger
+
+    await WSM.APIDragFace(histID, 8, 5.0, true);
 
     /*
     await WSM.APIConnectPoint3ds(histID, 
