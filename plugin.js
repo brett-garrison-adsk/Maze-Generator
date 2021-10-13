@@ -6,8 +6,10 @@ document.getElementById("CreateMazeBtn").addEventListener("click", async () => {
     w = Number(document.getElementById("Size").value);
     ww = Math.floor(Number(document.getElementById("Wall").value) / 2);
 
+    await FormIt.UndoManagement.BeginState("maze");
     await setup();
     await draw();
+    await FormIt.UndoManagement.EndState("maze");
 });
 
 var width, height, len, cols, rows,
