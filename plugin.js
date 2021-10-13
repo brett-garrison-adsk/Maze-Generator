@@ -53,10 +53,9 @@ async function setup() {
 
     var objids = await WSM.Utils.GetAllNonOwnedGeometricObjects(histID);
 
-    debugger;
     //var objid = await WSM.Utils.GetFaceIDFromCoedge(histID, 0);
 
-    //await WSM.APIDragFace(histID, objid, 5.0, true);
+    await WSM.APIDragFace(histID, objids[0], 5.0, true);
 
     /*
     await WSM.APIConnectPoint3ds(histID, 
