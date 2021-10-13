@@ -17,7 +17,7 @@ document.getElementById("CreateBlockBtn").addEventListener("click", async () => 
 
     //createBlock(w,l,h);
     await setup();
-    //draw();
+    draw();
 });
 
 var width, height, len, cols, rows,
@@ -29,7 +29,9 @@ var width, height, len, cols, rows,
 
     stack = [],
 
-    histID = await FormIt.GroupEdit.GetEditingHistoryID();
+    histID = await FormIt.GroupEdit.GetEditingHistoryID(),
+
+    perimID
 
 async function setup() {
     grid = []
@@ -55,7 +57,7 @@ async function setup() {
 
     //var objid = await WSM.Utils.GetFaceIDFromCoedge(histID, 0);
 
-    await WSM.APIDragFace(histID, objids[0], 5.0, true);
+    perimID = objids[0];
 
     /*
     await WSM.APIConnectPoint3ds(histID, 
@@ -83,6 +85,8 @@ function draw() {
   for (var i = 0; i < grid.length; i++) {
     grid[i].show();
   }
+
+WSM.APIDragFace(histID, perimID, height, true);
 }
 
 function step() {
