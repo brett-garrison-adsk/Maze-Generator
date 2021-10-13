@@ -1,4 +1,4 @@
-document.getElementById("CreateBlockBtn").addEventListener("click", async () => {
+document.getElementById("CreateMazeBtn").addEventListener("click", async () => {
     width = Number(document.getElementById("Width").value);
     height = Number(document.getElementById("Height").value);
     len = Number(document.getElementById("Length").value);
@@ -16,9 +16,10 @@ var width, height, len, cols, rows,
     grid = [],
     current,
     stack = [],
-    histID = await FormIt.GroupEdit.GetEditingHistoryID();
+    histID
 
 async function setup() {
+    histID = await FormIt.GroupEdit.GetEditingHistoryID();
     grid = []
     cols = Math.floor(width / w)
     rows = Math.floor(len / w)
