@@ -17,7 +17,7 @@ document.getElementById("CreateBlockBtn").addEventListener("click", async () => 
 
     //createBlock(w,l,h);
     await setup();
-    draw();
+    await draw();
 });
 
 var width, height, len, cols, rows,
@@ -79,14 +79,14 @@ async function setup() {
     */
 }
 
-function draw() {
+async function draw() {
   while(step()) {}
   
   for (var i = 0; i < grid.length; i++) {
-    grid[i].show();
+    await grid[i].show();
   }
 
-WSM.APIDragFace(histID, perimID, height, true);
+  await WSM.APIDragFace(histID, perimID, height, true);
 }
 
 function step() {
