@@ -1,12 +1,3 @@
-const createBlock = async (w,l,h) => {
-    const pt1 = await WSM.Geom.Point3d(0,0,0);
-    const pt2 = await WSM.Geom.Point3d(w,l,h);
-    const histID = await FormIt.GroupEdit.GetEditingHistoryID();
-    console.log(histID, pt1, pt2)
-
-    const test = await WSM.APICreateBlock(histID, pt1, pt2);
-}
-
 document.getElementById("CreateBlockBtn").addEventListener("click", async () => {
     width = Number(document.getElementById("Width").value);
     height = Number(document.getElementById("Height").value);
@@ -15,7 +6,6 @@ document.getElementById("CreateBlockBtn").addEventListener("click", async () => 
     w = Number(document.getElementById("Size").value);
     ww = Math.floor(Number(document.getElementById("Wall").value) / 2);
 
-    //createBlock(w,l,h);
     await setup();
     await draw();
 });
@@ -24,11 +14,8 @@ var width, height, len, cols, rows,
     w,
     ww,
     grid = [],
-
     current,
-
     stack = [],
-
     histID = await FormIt.GroupEdit.GetEditingHistoryID();
 
 async function setup() {
@@ -53,21 +40,29 @@ async function setup() {
 }
 
 async function draw() {
+  // Generate the maze
   while(step()) {}
   
+  // Render the walls
   for (var i = 0; i < grid.length; i++) {
     await grid[i].show();
   }
 
+  // Gets the face ids
   var objids = await WSM.Utils.GetAllNonOwnedGeometricObjects(histID);
 
+  // Deletes the floor of the hallways
   await WSM.APIDeleteObject(histID, objids[1]);
+
+  // Raises the walls
   await WSM.APIDragFace(histID, objids[0], height, true);
 }
 
 function step() {
   current.visited = true;
   
+  // Follows the steps for a recursive backtracker
+  // 
   // STEP 1
   var next = current.checkNeighbors();
   if (next) {
@@ -149,8 +144,6 @@ function Cell(i, j) {
     } else {
       return undefined;
     }
-
-
   }
 
   this.show = async function() {
