@@ -52,31 +52,6 @@ async function setup() {
         await WSM.Geom.Point3d(width, 0, 0),
         await WSM.Geom.Point3d(width, len, 0)
     );
-
-    var objids = await WSM.Utils.GetAllNonOwnedGeometricObjects(histID);
-
-    //var objid = await WSM.Utils.GetFaceIDFromCoedge(histID, 0);
-
-    perimID = objids[0];
-
-    /*
-    await WSM.APIConnectPoint3ds(histID, 
-        await WSM.Geom.Point3d(0, 0, 0), 
-        
-    );
-    await WSM.APIConnectPoint3ds(histID, 
-        await WSM.Geom.Point3d(width, 0, 0), 
-        
-    );
-    await WSM.APIConnectPoint3ds(histID, 
-        await WSM.Geom.Point3d(width, len, 0), 
-        await WSM.Geom.Point3d(0, len, 0)
-    );
-    await WSM.APIConnectPoint3ds(histID, 
-        await WSM.Geom.Point3d(0, len, 0), 
-        await WSM.Geom.Point3d(0, 0, 0)
-    );
-    */
 }
 
 async function draw() {
@@ -85,6 +60,10 @@ async function draw() {
   for (var i = 0; i < grid.length; i++) {
     await grid[i].show();
   }
+
+  var objids = await WSM.Utils.GetAllNonOwnedGeometricObjects(histID);
+
+  perimID = objids[0];
 
   await WSM.APIDragFace(histID, perimID, height, true);
 }
