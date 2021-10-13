@@ -9,7 +9,7 @@ const createBlock = async (w,l,h) => {
 
 document.getElementById("CreateBlockBtn").addEventListener("click", async () => {
     width = Number(document.getElementById("Width").value);
-    // const h = Number(document.getElementById("Height").value);
+    height = Number(document.getElementById("Height").value);
     len = Number(document.getElementById("Length").value);
 
     w = Number(document.getElementById("Size").value);
@@ -63,6 +63,7 @@ async function draw() {
 
   var objids = await WSM.Utils.GetAllNonOwnedGeometricObjects(histID);
 
+  debugger
   perimID = objids[0];
 
   await WSM.APIDragFace(histID, perimID, height, true);
