@@ -51,9 +51,7 @@ async function setup() {
         await WSM.Geom.Point3d(width, len, 0)
     );
 
-    debugger
-
-    await WSM.APIDragFace(histID, 8, 5.0, true);
+    await WSM.APIDragFace(histID, 10, 5.0, true);
 
     /*
     await WSM.APIConnectPoint3ds(histID, 
