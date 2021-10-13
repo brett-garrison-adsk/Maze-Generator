@@ -29,9 +29,7 @@ var width, height, len, cols, rows,
 
     stack = [],
 
-    histID = await FormIt.GroupEdit.GetEditingHistoryID(),
-
-    perimID
+    histID = await FormIt.GroupEdit.GetEditingHistoryID();
 
 async function setup() {
     grid = []
@@ -63,10 +61,8 @@ async function draw() {
 
   var objids = await WSM.Utils.GetAllNonOwnedGeometricObjects(histID);
 
-  debugger
-  perimID = objids[0];
-
-  await WSM.APIDragFace(histID, perimID, height, true);
+  await WSM.APIDeleteObject(histID, objids[1]);
+  await WSM.APIDragFace(histID, objids[0], height, true);
 }
 
 function step() {
