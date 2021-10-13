@@ -17,7 +17,7 @@ document.getElementById("CreateBlockBtn").addEventListener("click", async () => 
 
     //createBlock(w,l,h);
     await setup();
-    draw();
+    //draw();
 });
 
 var width, height, len, cols, rows,
@@ -45,13 +45,22 @@ async function setup() {
     current = grid[0];
 
     // Draw outter border
+    var obj = await WSM.APICreateRectangle(histID, 
+        await WSM.Geom.Point3d(0, 0, 0),
+        await WSM.Geom.Point3d(width, 0, 0),
+        await WSM.Geom.Point3d(width, len, 0)
+    );
+
+    WSM.APIExtrudeEdges(histID, obj)
+
+    /*
     await WSM.APIConnectPoint3ds(histID, 
         await WSM.Geom.Point3d(0, 0, 0), 
-        await WSM.Geom.Point3d(width, 0, 0)
+        
     );
     await WSM.APIConnectPoint3ds(histID, 
         await WSM.Geom.Point3d(width, 0, 0), 
-        await WSM.Geom.Point3d(width, len, 0)
+        
     );
     await WSM.APIConnectPoint3ds(histID, 
         await WSM.Geom.Point3d(width, len, 0), 
@@ -61,6 +70,7 @@ async function setup() {
         await WSM.Geom.Point3d(0, len, 0), 
         await WSM.Geom.Point3d(0, 0, 0)
     );
+    */
 }
 
 function draw() {
