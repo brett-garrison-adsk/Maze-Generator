@@ -46,9 +46,9 @@ async function setup() {
 
     // Draw outter border
     var obj = await WSM.APICreateRectangle(histID, 
-        await WSM.Geom.Point3d(0, 0, 0),
-        await WSM.Geom.Point3d(width, 0, 0),
-        await WSM.Geom.Point3d(width, len, 0)
+        await WSM.Geom.Point3d(0 - ww, 0 - ww, 0),
+        await WSM.Geom.Point3d(width + ww, 0 - ww, 0),
+        await WSM.Geom.Point3d(width + ww, len + ww, 0)
     );
 }
 
