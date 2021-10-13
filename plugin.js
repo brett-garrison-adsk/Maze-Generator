@@ -32,6 +32,7 @@ var width, height, len, cols, rows,
     histID = await FormIt.GroupEdit.GetEditingHistoryID();
 
 async function setup() {
+    grid = []
     cols = Math.floor(width / w)
     rows = Math.floor(len / w)
     for (var j = 0; j < rows; j++) {
