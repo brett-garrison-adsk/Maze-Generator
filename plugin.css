@@ -63,3 +63,9 @@
         padding: 6px;
         outline: none;
     }
+
+    input#CreateMazeBtn:disabled {
+        background-color: grey;
+        border-color: grey;
+    }
+    
