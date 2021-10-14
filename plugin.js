@@ -12,7 +12,9 @@
 // Recursive backtracker
 // https://en.wikipedia.org/wiki/Maze_generation_algorithm
 
-document.getElementById("CreateMazeBtn").addEventListener("click", async () => {
+const btnMaze = document.getElementById("CreateMazeBtn");
+
+btnMaze.addEventListener("click", async () => {
     width = Number(document.getElementById("Width").value);
     height = Number(document.getElementById("Height").value);
     len = Number(document.getElementById("Length").value);
@@ -20,10 +22,16 @@ document.getElementById("CreateMazeBtn").addEventListener("click", async () => {
     w = Number(document.getElementById("Size").value);
     ww = Number(document.getElementById("Wall").value) / 2;
 
+    // Lock the generate button
+    btnMaze.disabled = true;
+
     await FormIt.UndoManagement.BeginState("maze");
     await setup();
     await draw();
     await FormIt.UndoManagement.EndState("maze");
+
+    // Unlock the generate button
+    btnMaze.disabled = false;
 });
 
 var width, height, len, cols, rows,
