@@ -16,11 +16,25 @@ const btnMaze = document.getElementById("CreateMazeBtn");
 
 btnMaze.addEventListener("click", async () => {
     width = Number(document.getElementById("Width").value);
+    if(width < 0)
+        return alert("Maze width must be greater than 0")
     height = Number(document.getElementById("Height").value);
+    if(height < 0)
+        return alert("Maze height must be greater than 0")
     len = Number(document.getElementById("Length").value);
+    if(len < 0)
+        return alert("Maze length must be greater than 0")
 
     w = Number(document.getElementById("Size").value);
+    if(w < 0)
+        return alert("Cell size must be greater than 0")
+    
     wall = Number(document.getElementById("Wall").value) / 2;
+    if(wall < 0)
+        return alert("Wall width must be greater than 0")
+    if(wall * 4 > width ||
+        wall * 4 > len)
+        return alert("Combined wall widths must be less than maze width and height")
     l = w;
 
     // Lock the generate button
@@ -48,9 +62,9 @@ async function setup() {
     
     // Draw outter border
     var obj = await WSM.APICreateRectangle(histID, 
-        await WSM.Geom.Point3d(0 - wall, 0 - wall, 0),
-        await WSM.Geom.Point3d(width - wall, 0 - wall, 0),
-        await WSM.Geom.Point3d(width - wall, len - wall, 0)
+        await WSM.Geom.Point3d(0, 0, 0),
+        await WSM.Geom.Point3d(width, 0, 0),
+        await WSM.Geom.Point3d(width, len, 0)
     );
 
     // Reduce the width and length of the inside of the maze
@@ -64,6 +78,10 @@ async function setup() {
     // Get columns and rows
     cols = Math.floor(width / w)
     rows = Math.floor(len / w)
+
+    // Error trap some sizes
+    cols = cols <= 0 ? 1 : cols
+    rows = rows <= 0 ? 1 : rows
 
     // Adjust cell size if original size wouldn't fill maze
     w = width / cols
@@ -190,8 +208,8 @@ function Cell(i, j) {
   }
 
   this.show = async function() {
-    var x = this.i * w;
-    var y = this.j * l;
+    var x = (this.i * w) + wall;
+    var y = (this.j * l) + wall;
 
     // Top
     if (this.walls[0]) {
@@ -282,4 +300,3 @@ function Cell(i, j) {
     }
   }
 }
-
