@@ -20,7 +20,8 @@ btnMaze.addEventListener("click", async () => {
     len = Number(document.getElementById("Length").value);
 
     w = Number(document.getElementById("Size").value);
-    ww = Number(document.getElementById("Wall").value) / 2;
+    wall = Number(document.getElementById("Wall").value) / 2;
+    l = w;
 
     // Lock the generate button
     btnMaze.disabled = true;
@@ -36,7 +37,7 @@ btnMaze.addEventListener("click", async () => {
 
 var width, height, len, cols, rows,
     w,
-    ww,
+    wall,
     grid = [],
     current,
     stack = [],
@@ -47,15 +48,15 @@ async function setup() {
     
     // Draw outter border
     var obj = await WSM.APICreateRectangle(histID, 
-        await WSM.Geom.Point3d(0 - ww, 0 - ww, 0),
-        await WSM.Geom.Point3d(width - ww, 0 - ww, 0),
-        await WSM.Geom.Point3d(width - ww, len - ww, 0)
+        await WSM.Geom.Point3d(0 - wall, 0 - wall, 0),
+        await WSM.Geom.Point3d(width - wall, 0 - wall, 0),
+        await WSM.Geom.Point3d(width - wall, len - wall, 0)
     );
 
     // Reduce the width and length of the inside of the maze
     // to account for the outter walls
-    width -= ww * 2
-    len -= ww * 2
+    width -= wall * 2
+    len -= wall * 2
 
     // Reset grid
     grid = []
@@ -65,7 +66,8 @@ async function setup() {
     rows = Math.floor(len / w)
 
     // Adjust cell size if original size wouldn't fill maze
-    w = ((width / cols) + (len / rows)) / 2
+    w = width / cols
+    l = len / rows
 
     // Fill grid with cells
     for (var j = 0; j < rows; j++) {
@@ -189,93 +191,93 @@ function Cell(i, j) {
 
   this.show = async function() {
     var x = this.i * w;
-    var y = this.j * w;
+    var y = this.j * l;
 
     // Top
     if (this.walls[0]) {
         WSM.APIConnectPoint3ds(histID, 
-            await WSM.Geom.Point3d(this.left && !this.left.walls[1] ? (x - ww) : (x + ww), y + ww, 0), 
-            await WSM.Geom.Point3d(this.right && !this.right.walls[3] ? (x + w + ww) : (x + w - ww), y + ww, 0)
+            await WSM.Geom.Point3d(this.left && !this.left.walls[1] ? (x - wall) : (x + wall), y + wall, 0), 
+            await WSM.Geom.Point3d(this.right && !this.right.walls[3] ? (x + w + wall) : (x + w - wall), y + wall, 0)
         );
 
         // Cap Left
         if(this.left && !this.left.walls[0])
             WSM.APIConnectPoint3ds(histID, 
-                await WSM.Geom.Point3d(x - ww, y + ww, 0), 
-                await WSM.Geom.Point3d(x - ww, y, 0)
+                await WSM.Geom.Point3d(x - wall, y + wall, 0), 
+                await WSM.Geom.Point3d(x - wall, y, 0)
             );
 
         // Cap Right
         if(this.right && !this.right.walls[0])
             WSM.APIConnectPoint3ds(histID, 
-                await WSM.Geom.Point3d(x + w + ww, y + ww, 0), 
-                await WSM.Geom.Point3d(x + w + ww, y, 0)
+                await WSM.Geom.Point3d(x + w + wall, y + wall, 0), 
+                await WSM.Geom.Point3d(x + w + wall, y, 0)
             );
     }
 
     // Right
     if (this.walls[1]) {
         WSM.APIConnectPoint3ds(histID, 
-            await WSM.Geom.Point3d(x + w - ww, this.top && !this.top.walls[2] ? (y - ww) : (y + ww), 0), 
-            await WSM.Geom.Point3d(x + w - ww, this.bottom && !this.bottom.walls[0] ? (y + w + ww) : (y + w - ww), 0)
+            await WSM.Geom.Point3d(x + w - wall, this.top && !this.top.walls[2] ? (y - wall) : (y + wall), 0), 
+            await WSM.Geom.Point3d(x + w - wall, this.bottom && !this.bottom.walls[0] ? (y + l + wall) : (y + l - wall), 0)
         );
       
         // Cap Top
         if(this.top && !this.top.walls[1])
             WSM.APIConnectPoint3ds(histID, 
-                await WSM.Geom.Point3d(x + w - ww, y - ww, 0), 
-                await WSM.Geom.Point3d(x + w, y - ww, 0)
+                await WSM.Geom.Point3d(x + w - wall, y - wall, 0), 
+                await WSM.Geom.Point3d(x + w, y - wall, 0)
             );
 
         // Cap Bottom
         if(this.bottom && !this.bottom.walls[1])
             WSM.APIConnectPoint3ds(histID, 
-                await WSM.Geom.Point3d(x + w - ww, y + w + ww, 0), 
-                await WSM.Geom.Point3d(x + w, y + w + ww, 0)
+                await WSM.Geom.Point3d(x + w - wall, y + l + wall, 0), 
+                await WSM.Geom.Point3d(x + w, y + l + wall, 0)
             );
     }
     
     // Bottom
     if (this.walls[2]) {
         WSM.APIConnectPoint3ds(histID, 
-            await WSM.Geom.Point3d(this.right && !this.right.walls[3] ? (x + w + ww) : (x + w - ww), y + w - ww, 0), 
-            await WSM.Geom.Point3d(this.left && !this.left.walls[1] ? (x - ww) : (x + ww), y + w - ww, 0)
+            await WSM.Geom.Point3d(this.right && !this.right.walls[3] ? (x + w + wall) : (x + w - wall), y + l - wall, 0), 
+            await WSM.Geom.Point3d(this.left && !this.left.walls[1] ? (x - wall) : (x + wall), y + l - wall, 0)
         );
       
         // Cap Left
         if(this.left && !this.left.walls[2])
             WSM.APIConnectPoint3ds(histID, 
-                await WSM.Geom.Point3d(x - ww, y + w - ww, 0), 
-                await WSM.Geom.Point3d(x - ww, y + w + ww, 0)
+                await WSM.Geom.Point3d(x - wall, y + l - wall, 0), 
+                await WSM.Geom.Point3d(x - wall, y + l + wall, 0)
             );
 
         // Cap Right
         if(this.right && !this.right.walls[2])
             WSM.APIConnectPoint3ds(histID, 
-                await WSM.Geom.Point3d(x + w + ww, y + w - ww, 0), 
-                await WSM.Geom.Point3d(x + w + ww, y + w, 0)
+                await WSM.Geom.Point3d(x + w + wall, y + l - wall, 0), 
+                await WSM.Geom.Point3d(x + w + wall, y + l, 0)
             );
     }
     
     // Left
     if (this.walls[3]) {
         WSM.APIConnectPoint3ds(histID, 
-            await WSM.Geom.Point3d(x + ww, this.bottom && !this.bottom.walls[0] ? (y + w + ww) : (y + w - ww), 0), 
-            await WSM.Geom.Point3d(x + ww, this.top && !this.top.walls[2] ? (y - ww) : (y + ww), 0)
+            await WSM.Geom.Point3d(x + wall, this.bottom && !this.bottom.walls[0] ? (y + l + wall) : (y + l - wall), 0), 
+            await WSM.Geom.Point3d(x + wall, this.top && !this.top.walls[2] ? (y - wall) : (y + wall), 0)
         );
       
       // Cap Top
       if(this.top && !this.top.walls[3])
         WSM.APIConnectPoint3ds(histID, 
-            await WSM.Geom.Point3d(x + ww, y - ww, 0), 
-            await WSM.Geom.Point3d(x, y - ww, 0)
+            await WSM.Geom.Point3d(x + wall, y - wall, 0), 
+            await WSM.Geom.Point3d(x, y - wall, 0)
         );
 
       // Cap Bottom
       if(this.bottom && !this.bottom.walls[3])
         WSM.APIConnectPoint3ds(histID, 
-            await WSM.Geom.Point3d(x + ww, y + w + ww, 0), 
-            await WSM.Geom.Point3d(x, y + w + ww, 0)
+            await WSM.Geom.Point3d(x + wall, y + l + wall, 0), 
+            await WSM.Geom.Point3d(x, y + l + wall, 0)
         );
     }
   }
