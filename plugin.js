@@ -18,7 +18,7 @@ document.getElementById("CreateMazeBtn").addEventListener("click", async () => {
     len = Number(document.getElementById("Length").value);
 
     w = Number(document.getElementById("Size").value);
-    ww = Math.floor(Number(document.getElementById("Wall").value) / 2);
+    ww = Number(document.getElementById("Wall").value) / 2;
 
     await FormIt.UndoManagement.BeginState("maze");
     await setup();
@@ -36,9 +36,30 @@ var width, height, len, cols, rows,
 
 async function setup() {
     histID = await FormIt.GroupEdit.GetEditingHistoryID();
+    
+    // Draw outter border
+    var obj = await WSM.APICreateRectangle(histID, 
+        await WSM.Geom.Point3d(0 - ww, 0 - ww, 0),
+        await WSM.Geom.Point3d(width - ww, 0 - ww, 0),
+        await WSM.Geom.Point3d(width - ww, len - ww, 0)
+    );
+
+    // Reduce the width and length of the inside of the maze
+    // to account for the outter walls
+    width -= ww * 2
+    len -= ww * 2
+
+    // Reset grid
     grid = []
+
+    // Get columns and rows
     cols = Math.floor(width / w)
     rows = Math.floor(len / w)
+
+    // Adjust cell size if original size wouldn't fill maze
+    w = ((width / cols) + (len / rows)) / 2
+
+    // Fill grid with cells
     for (var j = 0; j < rows; j++) {
         for (var i = 0; i < cols; i++) {
             var cell = new Cell(i, j);
@@ -46,14 +67,8 @@ async function setup() {
         }
     }
 
-    current = grid[0];
-
-    // Draw outter border
-    var obj = await WSM.APICreateRectangle(histID, 
-        await WSM.Geom.Point3d(0 - ww, 0 - ww, 0),
-        await WSM.Geom.Point3d(width + ww, 0 - ww, 0),
-        await WSM.Geom.Point3d(width + ww, len + ww, 0)
-    );
+    // Set first cell
+    current = grid[0];  
 }
 
 async function draw() {
@@ -79,7 +94,8 @@ function step() {
   current.visited = true;
   
   // Follows the steps for a recursive backtracker
-  // 
+  // https://en.wikipedia.org/wiki/Maze_generation_algorithm
+  
   // STEP 1
   var next = current.checkNeighbors();
   if (next) {
@@ -166,8 +182,6 @@ function Cell(i, j) {
   this.show = async function() {
     var x = this.i * w;
     var y = this.j * w;
-    
-    //var histID = await FormIt.GroupEdit.GetEditingHistoryID();
 
     // Top
     if (this.walls[0]) {
@@ -258,3 +272,4 @@ function Cell(i, j) {
     }
   }
 }
+
