@@ -39,6 +39,16 @@ btnMaze.addEventListener("click", async () => {
 function updateDoors() {
     // Reinit the grid
     setup();
+    // Record existing selection
+    let curEntryIx = ctlEntry.selectedIndex,
+        curEntry = ctlEntry.options[curEntryIx],
+        curEntryIsMiddle = curEntry ?
+            curEntry.text.includes("Middle") : true,
+        curExitIx = ctlExit.selectedIndex,
+        curExit = ctlExit.options[curExitIx],
+        curExitIsMiddle = curExit ?
+            curExit.text.includes("Middle") : true
+    debugger
     // Clear current lists
     ctlEntry.innerHTML = "";
     ctlExit.innerHTML = "";
@@ -55,10 +65,10 @@ function updateDoors() {
         option.value = i;
         option.innerText = i + (i == midCell ? ' (Middle)' : '');
         var optionX = option.cloneNode(true);
-        if(i == midCell) {
-            option.selected = true;
-            optionX.selected = true;
-        }
+        option.selected = i == midCell && curEntryIsMiddle ? 
+            true : !curEntryIsMiddle && curEntryIx == i;
+        optionX.selected = i == midCell && curExitIsMiddle ? 
+            true : !curExitIsMiddle && curExitIx == i;
         // Add option to lists
         ctlEntry.appendChild(option);
         ctlExit.appendChild(optionX);
