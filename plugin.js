@@ -197,7 +197,7 @@ async function draw() {
 
         // Gets entry face id
         var exitIds = await WSM.APIGetCreatedChangedAndDeletedInActiveDeltaReadOnly(histID, WSM.nObjectType.nFaceType);
-        debugger
+
         // Make the opening
         await WSM.APIDragFace(histID, exitIds.changed[1], 0 - height, true);
     }
