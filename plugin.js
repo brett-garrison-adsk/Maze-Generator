@@ -48,7 +48,7 @@ function updateDoors() {
         curExit = ctlExit.options[curExitIx],
         curExitIsMiddle = curExit ?
             curExit.text.includes("Middle") : true
-    debugger
+    
     // Clear current lists
     ctlEntry.innerHTML = "";
     ctlExit.innerHTML = "";
